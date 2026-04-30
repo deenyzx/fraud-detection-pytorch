@@ -16,7 +16,7 @@ This project frames fraud detection as an **unsupervised anomaly detection** pro
 
 ## Dataset
 
-[Kaggle Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+[Kaggle Credit Card Fraud Detection Dataset]https://www.kaggle.com/datasets/tjverry/credit-card-transactions)
 
 - 284,807 transactions
 - 492 fraud cases (~0.17% of all transactions)
