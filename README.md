@@ -28,7 +28,7 @@ This project frames fraud detection as an **unsupervised anomaly detection** pro
 
 ## How It Works
 
-1. **Preprocessing** — Numerical features are scaled, categorical features are one-hot encoded, and new features are engineered (e.g. CVV match, account age, transaction hour)
+1. **Preprocessing** — Not needed since kaggle's dataset is already clean
 2. **Training** — The autoencoder is trained **only on non-fraudulent transactions**, learning what normal looks like
 3. **Inference** — Reconstruction error (MSE) is computed for every transaction
 4. **Thresholding** — Transactions exceeding a chosen error threshold are flagged as fraud
@@ -39,18 +39,15 @@ This project frames fraud detection as an **unsupervised anomaly detection** pro
 ## Project Structure
 
 ```
-├── data/
-│   └── transactions.csv         # Kaggle dataset (not tracked)
-├── src/
-│   ├── preprocess.py            # Feature engineering and scaling
-│   ├── dataset.py               # PyTorch Dataset class
-│   ├── model.py                 # Autoencoder architecture
-│   ├── train.py                 # Training loop
-│   ├── evaluate.py              # Metrics and threshold selection
-│   └── utils.py                 # Helper functions
+fraud-detection-autoencoder/
 ├── notebooks/
-│   ├── eda.ipynb                # Exploratory data analysis
-│   └── results.ipynb            # Result visualization
+│   ├── eda.ipynb                 # Exploratory data analysis  ← next step
+│   └── results.ipynb             # Result visualization
+├── src/
+│   ├── dataset.py                # PyTorch Dataset class
+│   ├── model.py                  # Autoencoder architecture
+│   ├── train.py                  # Training loop
+│   └── evaluate.py               # Metrics and threshold selection
 ├── requirements.txt
 └── README.md
 ```
