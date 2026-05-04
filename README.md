@@ -1,6 +1,6 @@
 # fraud-detection-pytorch
 
-> **Status: Pre-development** — README written as part of project planning. Implementation not yet started.
+> **Status: Development** — README written as part of project planning. Implementation not yet started.
 
 # Credit Card Fraud Detection with Autoencoder
 
