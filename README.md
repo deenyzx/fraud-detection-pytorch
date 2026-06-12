@@ -107,8 +107,6 @@ python main.py
 | Recall | 0.6964 |
 | F1-Score | 0.2546 |
 
-> Fill in after running `main.py`. Results are printed at the end of training.
-
 ---
 
 ## Tech Stack
