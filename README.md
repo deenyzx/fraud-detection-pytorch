@@ -1,10 +1,20 @@
 # fraud-detection-pytorch
 
-> **Status: Development** — README written as part of project planning. Implementation not yet started.
-
-# Credit Card Fraud Detection with Autoencoder
-
 A PyTorch-based anomaly detection system that identifies fraudulent credit card transactions using an autoencoder neural network.
+
+---
+
+## Table of Contents
+- [Overview](#overview)
+- [Dataset](#dataset)
+- [How It Works](#how-it-works)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Results](#results)
+- [Tech Stack](#tech-stack)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
@@ -16,40 +26,47 @@ This project frames fraud detection as an **unsupervised anomaly detection** pro
 
 ## Dataset
 
-[Kaggle Credit Card Fraud Detection Dataset]https://www.kaggle.com/datasets/tjverry/credit-card-transactions)
+[Kaggle Credit Card Transactions Dataset](https://www.kaggle.com/datasets/tjverry/credit-card-transactions)
 
 - 284,807 transactions
 - 492 fraud cases (~0.17% of all transactions)
-- Features include: transaction amount, account balance, merchant info, card present flag, POS entry mode, and more
+- Features used: `transactionamount`, `availablemoney`, `currentbalance`, `creditlimit`, `cardpresent`, `cvv_match` (engineered)
 
-> Download the dataset from Kaggle and place it in the `data/` directory before running.
+> Download the dataset from Kaggle and place the zip file at `data/creditcard.zip` before running.
 
 ---
 
 ## How It Works
 
-1. **Preprocessing** — Not needed since kaggle's dataset is already clean
-2. **Training** — The autoencoder is trained **only on non-fraudulent transactions**, learning what normal looks like
-3. **Inference** — Reconstruction error (MSE) is computed for every transaction
-4. **Thresholding** — Transactions exceeding a chosen error threshold are flagged as fraud
-5. **Evaluation** — Model is assessed using AUROC, AUPRC, and F1-score
+1. **Feature Engineering** — A `cvv_match` feature is derived by comparing `cardcvv` vs `enteredcvv`
+2. **Preprocessing** — Continuous features are standardized using `StandardScaler`; the scaler is saved for inference
+3. **Training** — The autoencoder is trained **only on normal transactions**, learning to reconstruct legitimate behavior
+4. **Inference** — Reconstruction error (MSE) is computed per transaction; high error signals an anomaly
+5. **Thresholding** — The optimal threshold is selected by maximizing F1-score on the precision-recall curve
+6. **Evaluation** — Model is assessed using PR-AUC, Precision, Recall, and F1-score
 
 ---
 
 ## Project Structure
 
 ```
-fraud-detection-autoencoder/
-├── notebooks/
-│   ├── eda.ipynb                 # Exploratory data analysis  ← next step
-│   └── results.ipynb             # Result visualization
+fraud-detection-pytorch/
 ├── src/
-│   ├── dataset.py                # PyTorch Dataset class
-│   ├── model.py                  # Autoencoder architecture
-│   ├── train.py                  # Training loop
-│   └── evaluate.py               # Metrics and threshold selection
-├── requirements.txt
-└── README.md
+│   ├── __init__.py
+│   ├── data_loader.py        # Data ingestion, feature engineering, preprocessing
+│   ├── model.py              # Autoencoder architecture
+│   ├── training.py           # Training loop
+│   └── evaluation.py         # Metrics and threshold selection
+├── data/
+│   └── creditcard.zip        # Dataset (download from Kaggle)
+├── models/                   # Auto-created on first run
+│   ├── autoencoder_fraud.pth # Saved model weights
+│   ├── scaler.pkl            # Saved StandardScaler for inference
+│   └── threshold.json        # Optimal decision threshold
+├── main.py                   # Full training pipeline
+├── run.ipynb                 # End-to-end Colab notebook (train + evaluate + inference)
+├── config.yaml               # Hyperparameters and paths
+└── requirements.txt
 ```
 
 ---
@@ -57,8 +74,8 @@ fraud-detection-autoencoder/
 ## Installation
 
 ```bash
-git clone https://github.com/your-username/fraud-detection-autoencoder.git
-cd fraud-detection-autoencoder
+git clone https://github.com/deenyzx/fraud-detection-pytorch.git
+cd fraud-detection-pytorch
 pip install -r requirements.txt
 ```
 
@@ -66,29 +83,31 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Option A — Colab (recommended)
+
+Open `run.ipynb` in Google Colab and run all cells top to bottom. The notebook handles everything: training, evaluation charts, and a live interactive inference form where you can manually enter a transaction and receive a fraud risk score.
+
+### Option B — Local
+
 ```bash
-# Preprocess the data
-python src/preprocess.py
+# Train the model, save weights + scaler + threshold
+python main.py
 
-# Train the autoencoder
-python src/train.py
-
-# Evaluate on the test set
-python src/evaluate.py
+# Then open run.ipynb in Jupyter for evaluation charts and inference
 ```
 
 ---
 
-## Success Metrics
+## Results
 
-| Metric | Target |
-|--------|--------|
-| AUROC | > 0.90 |
-| AUPRC | > 0.40 |
-| Recall | > 0.75 |
-| F1-Score | Maximized at chosen threshold |
+| Metric | Value |
+|--------|-------|
+| PR-AUC | — |
+| Precision | — |
+| Recall | — |
+| F1-Score | — |
 
-> Accuracy is not used as a metric due to severe class imbalance.
+> Fill in after running `main.py`. Results are printed at the end of training.
 
 ---
 
@@ -99,9 +118,20 @@ python src/evaluate.py
 - **scikit-learn** — preprocessing and evaluation metrics
 - **pandas / numpy** — data manipulation
 - **matplotlib / seaborn** — visualization
+- **ipywidgets** — interactive inference form in Colab
 
 ---
 
-## Authors
+## Contributing
 
-Built as part of the PAAI (Practical Applications of AI) university course.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+---
+
+*Built as part of the PAAI (Practical Applications of AI) university course.*
