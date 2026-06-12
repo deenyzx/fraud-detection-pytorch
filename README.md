@@ -102,10 +102,10 @@ python main.py
 
 | Metric | Value |
 |--------|-------|
-| PR-AUC | — |
-| Precision | — |
-| Recall | — |
-| F1-Score | — |
+| PR-AUC | 0.1720 |
+| Precision | 0.1557 |
+| Recall | 0.6964 |
+| F1-Score | 0.2546 |
 
 > Fill in after running `main.py`. Results are printed at the end of training.
 
