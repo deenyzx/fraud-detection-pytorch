@@ -68,7 +68,6 @@ fraud-detection-pytorch/
 ├── main.py                   # Full training pipeline
 ├── run.ipynb                 # End-to-end Colab notebook (train + evaluate + inference)
 ├── config.yaml               # Hyperparameters and paths
-├── poster.pdf                # Project poster
 └── requirements.txt
 ```
 
@@ -105,10 +104,10 @@ python main.py
 
 | Metric | Value |
 |--------|-------|
-| PR-AUC | 0.1720 |
-| Precision | 0.1557 |
-| Recall | 0.6964 |
-| F1-Score | 0.2546 |
+| PR-AUC | 0.1718 |
+| Precision | 0.1726 |
+| Recall | 0.4942 |
+| F1-Score | 0.2558 |
 
 ---
 
