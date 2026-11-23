@@ -34,7 +34,7 @@ def evaluate_model(model, X_test, y_test, device='cpu'):
 
     # 2. Locate the optimal decision threshold maximizing the F1-Score balance
     f1_scores = 2 * (precisions * recalls) / (precisions + recalls + 1e-8)
-    best_idx = np.argmax(f1_scores)
+    best_idx = np.argmax(f1_scores[:-1])
     optimal_threshold = thresholds[best_idx]
 
     # 3. Classify records: If reconstruction error exceeds threshold -> Fraud (1), else Normal (0)

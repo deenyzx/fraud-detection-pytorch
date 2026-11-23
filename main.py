@@ -31,7 +31,7 @@ def main():
     
     # 2. Initialize the Autoencoder model using the dynamic input dimension
     print("\n--- Step 2: Initializing Model ---")
-    model = AnomalyAutoencoder(input_dim=input_dim)
+    model = AnomalyAutoencoder(input_dim=input_dim, latent_dim=config['model']['latent_dim'])
     print(model)
     
     # 3. Train the model using hyperparameters defined in config.yaml
@@ -51,7 +51,7 @@ def main():
     torch.save(trained_model.state_dict(), 'models/autoencoder_fraud.pth')
     print("Model parameters successfully saved to 'models/autoencoder_fraud.pth'")
 
-    # Save the scaler so inference.py can apply identical preprocessing
+    # Save the scaler so inference can apply identical preprocessing
     joblib.dump(scaler, 'models/scaler.pkl')
     print("Scaler saved to 'models/scaler.pkl'")
 
@@ -64,10 +64,10 @@ def main():
         device=device
     )
 
-    # Save the optimal threshold so inference.py can load it without hardcoding
+    # Save the optimal threshold so inference can load it without hardcoding
     with open('models/threshold.json', 'w') as f:
-        json.dump({'optimal_threshold': evaluation_results['optimal_threshold']}, f)
-    print(f"Optimal threshold saved to 'models/threshold.json'")
+        json.dump({'optimal_threshold': float(evaluation_results['optimal_threshold'])}, f)
+    print("Optimal threshold saved to 'models/threshold.json'")
     
     print("\nPipeline execution completed successfully using config.yaml parameters!")
 

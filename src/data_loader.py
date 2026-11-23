@@ -40,18 +40,25 @@ def prepare_data(zip_path='data/creditcard.zip', batch_size=256):
     # Convert boolean indicators to numeric binary flags (1/0)
     df['cardpresent'] = df['cardpresent'].astype(int)
     
-    # 5. Standardize continuous numerical values (Zero mean and unit variance)
-    scaler = StandardScaler()
-    num_cols = ['transactionamount', 'availablemoney', 'currentbalance', 'creditlimit']
-    df[num_cols] = scaler.fit_transform(df[num_cols])
-    
-    # 6. Separate normal transactions from fraudulent ones
+    # 5. Separate normal transactions from fraudulent ones
     normal_tx = df[df['isfraud'] == 0]
     fraud_tx = df[df['isfraud'] == 1]
     
-    # 7. Split normal transactions: 80% Train, 10% Validation, 10% Test
+    # 6. Split normal transactions: 80% Train, 10% Validation, 10% Test
     train_normal, temp_normal = train_test_split(normal_tx, test_size=0.2, random_state=42)
     val_normal, test_normal = train_test_split(temp_normal, test_size=0.5, random_state=42)
+    
+    # 7. Standardize continuous numerical values (Zero mean and unit variance), fitted on training data only
+    scaler = StandardScaler()
+    num_cols = ['transactionamount', 'availablemoney', 'currentbalance', 'creditlimit']
+    train_normal = train_normal.copy()
+    val_normal = val_normal.copy()
+    test_normal = test_normal.copy()
+    fraud_tx = fraud_tx.copy()
+    train_normal[num_cols] = scaler.fit_transform(train_normal[num_cols])
+    val_normal[num_cols] = scaler.transform(val_normal[num_cols])
+    test_normal[num_cols] = scaler.transform(test_normal[num_cols])
+    fraud_tx[num_cols] = scaler.transform(fraud_tx[num_cols])
     
     # Drop labels for unsupervised training (Autoencoder learns normal patterns only)
     X_train = train_normal.drop(['isfraud'], axis=1).values

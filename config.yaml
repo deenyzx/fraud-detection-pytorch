@@ -10,6 +10,3 @@ model:
 training:
   epochs: 20
   learning_rate: 0.001
-
-evaluation:
-  optimal_threshold: 0.000477

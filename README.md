@@ -14,7 +14,6 @@ A PyTorch-based anomaly detection system that identifies fraudulent credit card 
 - [Results](#results)
 - [Tech Stack](#tech-stack)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -28,21 +27,21 @@ This project frames fraud detection as an **unsupervised anomaly detection** pro
 
 [Kaggle Credit Card Transactions Dataset](https://www.kaggle.com/datasets/tjverry/credit-card-transactions)
 
-- 284,807 transactions
-- 492 fraud cases (~0.17% of all transactions)
+- 786,363 transactions
+- 12,417 fraud cases (~1.58% of all transactions)
 - Features used: `transactionamount`, `availablemoney`, `currentbalance`, `creditlimit`, `cardpresent`, `cvv_match` (engineered)
 
-> Download the dataset from Kaggle and place the zip file at `data/creditcard.zip` before running.
+> The dataset is already included in this repo at `data/creditcard.zip` (it contains `transactions.csv`).
 
 ---
 
 ## How It Works
 
 1. **Feature Engineering** — A `cvv_match` feature is derived by comparing `cardcvv` vs `enteredcvv`
-2. **Preprocessing** — Continuous features are standardized using `StandardScaler`; the scaler is saved for inference
+2. **Preprocessing** — Continuous features are standardized using `StandardScaler` fitted on the training data only; the scaler is saved for inference
 3. **Training** — The autoencoder is trained **only on normal transactions**, learning to reconstruct legitimate behavior
 4. **Inference** — Reconstruction error (MSE) is computed per transaction; high error signals an anomaly
-5. **Thresholding** — The optimal threshold is selected by maximizing F1-score on the precision-recall curve
+5. **Thresholding** — The threshold is selected by maximizing F1-score on the precision-recall curve of the test set
 6. **Evaluation** — Model is assessed using PR-AUC, Precision, Recall, and F1-score
 
 ---
@@ -58,7 +57,10 @@ fraud-detection-pytorch/
 │   ├── training.py           # Training loop
 │   └── evaluation.py         # Metrics and threshold selection
 ├── data/
-│   └── creditcard.zip        # Dataset (download from Kaggle)
+│   └── creditcard.zip        # Dataset (transactions.csv)
+├── notebooks/
+│   ├── 1_exploratory_data_analysis.ipynb
+│   └── 2_final_results_plots.ipynb
 ├── models/                   # Auto-created on first run
 │   ├── autoencoder_fraud.pth # Saved model weights
 │   ├── scaler.pkl            # Saved StandardScaler for inference
@@ -66,6 +68,7 @@ fraud-detection-pytorch/
 ├── main.py                   # Full training pipeline
 ├── run.ipynb                 # End-to-end Colab notebook (train + evaluate + inference)
 ├── config.yaml               # Hyperparameters and paths
+├── poster.pdf                # Project poster
 └── requirements.txt
 ```
 
@@ -123,12 +126,6 @@ python main.py
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
 ---
 
